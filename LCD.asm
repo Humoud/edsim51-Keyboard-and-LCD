@@ -17,8 +17,7 @@
 ; -string to be displayed is called MyString
 ; -string terminated by 0H 
 
-				ORG 0
-
+				ORG 00H
 
 START:
 	ACALL INIT_DISPLAY
@@ -114,12 +113,3 @@ SendData:
 
 STOP:
 	SJMP STOP
-
-
-
-
-
-
-
-
-

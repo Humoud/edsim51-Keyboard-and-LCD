@@ -1,13 +1,10 @@
 		ORG 00H
-
-            
 SCAN:
 	CALL CHECK
 	CALL WhichRow
 	CALL GET_KEY
 	CALL NoKeyPressed
 	SJMP SCAN
-
 
 GET_KEY:  
        RLC A			;skip D7 data (unused)

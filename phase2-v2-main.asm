@@ -1,7 +1,11 @@
 				ORG 00H
 MAIN:
 	ACALL START_Display
-	LCALL START_SERIAL
+	LCALL START_SERIAL			; storing result in 30H
+	;prompt user to select encrypt decrypt
+	; call keypad
+	; check if A = 1
+
 ;----------------------------------START OF LCD PROCEDURES--------
 START_Display:
 	ACALL INIT_DISPLAY
@@ -158,5 +162,6 @@ FINISH_RECIEVE:
 
 MESSAGE: DB "ENTER A MESSAGE" 
 		DB 00H
-
+MESSAGE2: DB "Press 1 to Decrypt or 2 to Encrypt" 
+		DB 00H
 END

@@ -1,0 +1,12 @@
+; This program will receive a string terminated by character 0DH
+; using the serial port and will re-sent it using the serial port
+; as well. Note that when using the UART unit connected to EdSim51
+; when sending strings, the character \r (hex code 0DH) is automatically
+; inserted at the end of the string when transmitted.
+
+
+; UART configured as 8-bit (variable baud rate, defined by T1)
+; UART must be set to NO parity
+; This program used 4800
+; This program uses interrupts instead of polling
+; Note the crystal used must be changed to 11.0592 MHz

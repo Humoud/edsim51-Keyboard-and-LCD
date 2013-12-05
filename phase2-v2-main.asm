@@ -352,10 +352,9 @@ CONT1:
 FINISH:
 	SJMP FINISH
 
-;----------END OF PROCEDURES----------
+;----------END MACHINE----------
 
 
-END
 
 
 ;FOR PROMPTING
@@ -371,3 +370,8 @@ KCODE1: DB     7,8,9     ;ROW 1
 KCODE0: DB     10,0,11   ;ROW 0
       
 END
+
+
+
+
+

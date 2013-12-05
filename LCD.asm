@@ -4,7 +4,7 @@
 ; 3. send low nibble of function set
 ; 4. send turn display ON (2 nibbles in sequence)
 ; 5. send entry mode (2 nibbles in sequence)
-;
+;------------------------------------------------------------------
 ; Assumptions: 
 ; -sending low nibble right after high nibble require NO wait
 ; exceptions for above rule is 1st nibble of initialization step
@@ -13,12 +13,12 @@
 ; -E  connected to P1.2
 ; -RW connected to ground (can only write LCD)
 ; -D7-D4 (data input) connect to P1.7-P1.4
-;
+;------------------------------------------------------------------
 ; -string to be displayed is called MyString
 ; -string terminated by 0H 
 
-				ORG 00H
 
+				ORG 00H
 START:
 	ACALL INIT_DISPLAY
 	SETB P1.3

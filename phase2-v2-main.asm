@@ -2,7 +2,7 @@
 MAIN:
 	ACALL START_Display
 	LCALL START_SERIAL			; storing result in 30H
-	;prompt user to select encrypt decrypt
+	; prompt user to select encrypt decrypt
 	; call keypad
 	; check if A = 1
 
@@ -18,7 +18,6 @@ DISPLAY:
 	LJMP STOP
 	
 CONT:
-	
 	LCALL SendData
 	INC DPTR
 	SJMP DISPLAY
@@ -97,7 +96,7 @@ SEND_CHAR:
 SendCmd:
 	CLR P1.3		; P1.3=0 => RS=0 => Because we are sending a Cmd
 	ACALL SEND_CHAR	; SEND_CHAR will send every bit in the accumalator
-	STAY_CMD:
+STAY_CMD:
 	JB P1.7, STAY_CMD	; WHILE BUSY FLAG UP, STAY HERE
 	RET
 
@@ -142,7 +141,8 @@ LOOP2:  JNB TI,LOOP2		; wait till transmission finish
 	DJNZ R1,PRINT		; check if end of string (# of char)
 	SJMP $			
 
-STORE:	INC R1			; increment number of characters received 
+STORE:	
+	INC R1			; increment number of characters received 
 	MOV @R0,A		; store receive character in memory
 	INC R0			; update memory pointer
 	SJMP LOOP		; repeat

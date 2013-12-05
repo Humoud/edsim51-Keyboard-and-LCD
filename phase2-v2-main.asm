@@ -1,12 +1,19 @@
-				ORG 00H
+			ORG 00H
+	LJMP MAIN
+
+			ORG 300H
+
 MAIN:
 	MOV A,#0
 	ACALL START_Display			; PROMPT USER TO ENTER MESSAGE
 	LCALL START_SERIAL			; RECIEVE MESSAGE & STORE IT IN 30H
 	MOV A,#1
 	ACALL START_Display			; PROMPT USER TO SELECT ENCRYPT/DECRYPT
-	; call keypad
-	; check if A = 1
+	; KEYPAD
+	CALL CHECK
+	CALL WhichRow
+	CALL GET_KEY
+	; RESULT IS NOW IN REGISTER A
 
 ;----------------------------------START OF LCD PROCEDURES--------
 START_Display:
@@ -156,13 +163,6 @@ FINISH_RECIEVE:
 ;-------------------------------END OF SERIAL PROCEDURES-----
 
 ;-------------------------------START OF LCD PROCEDURES------
-		ORG 00H
-SCAN:
-	CALL CHECK
-	CALL WhichRow
-	CALL GET_KEY
-	CALL NoKeyPressed
-	SJMP SCAN
 
 GET_KEY:  
        RLC A			;skip D7 data (unused)

@@ -107,8 +107,8 @@ SendCmd:
 SendData:
 	SETB P1.3		; P1.3=0 => RS=0 => Because we are sending a Cmd
 	ACALL SEND_CHAR	; SEND_CHAR will send every bit in the accumalator
-	STAY_DATA:
-	JB P1.7, STAY_DATA	; WHILE BUSY FLAG UP, STAY HERE
+STAY_DATA:
+	ACALL delay
 	RET
 
 STOP:

@@ -31,10 +31,13 @@ FIRST_TIME:
 	MOV DPTR,#MESSAGE
 	SJMP DISPLAY
 READ_FROM_R0:				;DISPLAY FORM R0
+	MOV A,#1
+	ACALL SendCmd		; THIS SHOULD CLEAR THE DISPLAY
+R0_TO_LCD:
 	MOV A,@R0
 	LCALL SendData
 	INC R0
-	DJNZ R6,READ_FROM_R0
+	DJNZ R6,R0_TO_LCD
 	RET
 DISPLAY:
 	CLR A
@@ -154,8 +157,8 @@ LOOP:
 	CLR RI			;
 	MOV A,SBUF		; read character
 	CJNE A,#0DH, STORE	; if not end of line, store it
-	MOV A,'#'			; END OF string
-	MOV @R0,A		; store receive character in memory
+				; END OF string
+	MOV @R0,#23H		; store receive character in memory
 	SJMP FINISH_RECIEVE
 START_PRINTING_SERIAL:
 	MOV R0,#30H		; else, start sending 
@@ -350,7 +353,7 @@ CONT1:
 	CJNE R0,#1,CONTEN		; CONTINUE ENCRYPTION
 	SJMP CONTDE				; CONTINUE DECRYPTION
 FINISH:
-	SJMP FINISH
+	RET
 
 ;----------END MACHINE----------
 

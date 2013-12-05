@@ -15,6 +15,7 @@ MAIN:
 	CALL GET_KEY
 	; RESULT IS NOW IN REGISTER A
 
+
 ;----------------------------------START OF LCD PROCEDURES--------
 START_Display:
 	ACALL INIT_DISPLAY
@@ -173,6 +174,7 @@ GET:
        SJMP GET               ;keep searching
 MATCH: CLR A                    ;set A=0 (match is found)
        MOVC A,@A+DPTR           ;get key number from table, store result in A
+       INC A
        RET
 ;------------
 NoKeyPressed:

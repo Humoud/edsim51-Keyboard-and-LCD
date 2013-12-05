@@ -90,8 +90,8 @@ INIT_DISPLAY:
 
 ; -------  procedure delay -------
 delay:	
-	MOV R0, #50	
-	DJNZ R0, $	
+	MOV R3, #50	
+	DJNZ R3, $	
 	RET
 ; -------  procedure SEND CHAR -------
 SEND_CHAR:	
@@ -126,13 +126,13 @@ SendCmd:
 	CLR P1.3		; P1.3=0 => RS=0 => Because we are sending a Cmd
 	ACALL SEND_CHAR	; SEND_CHAR will send every bit in the accumalator
 STAY_CMD:
-	JB P1.7,STAY_CMD	; WHILE BUSY FLAG UP, STAY HERE
+	ACALL DELAY
 	RET
 
 SendData:
-	SETB P1.3		; P1.3=0 => RS=0 => Because we are sending a Cmd
+	SETB P1.3		; P1.3=1 => RS=1 => Because we are sending a Cmd
 	ACALL SEND_CHAR	; SEND_CHAR will send every bit in the accumalator
-	ACALL DELAY	; WHILE BUSY FLAG UP, STAY HERE
+	ACALL DELAY	;  STAY HERE
 	RET
 
 STOP:

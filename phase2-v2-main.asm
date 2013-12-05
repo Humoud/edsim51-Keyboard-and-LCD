@@ -4,10 +4,10 @@
 			ORG 300H
 
 MAIN:
-	MOV A,#0
+	MOV A,#1
 	ACALL START_Display			; PROMPT USER TO ENTER MESSAGE
 	LCALL START_SERIAL			; RECIEVE MESSAGE & STORE IT IN 30H
-	MOV A,#1
+	CLR A
 	ACALL START_Display			; PROMPT USER TO SELECT ENCRYPT/DECRYPT
 	; KEYPAD
 	CALL CHECK
@@ -18,11 +18,15 @@ MAIN:
 
 ;----------------------------------START OF LCD PROCEDURES--------
 START_Display:
-	ACALL INIT_DISPLAY
 	SETB P1.3
-	MOV DPTR,#MESSAGE
-	JZ DISPLAY
+	CJNE A,#0,FIRST_TIME
 	MOV DPTR,#MESSAGE2
+	SJMP DISPLAY
+
+FIRST_TIME:
+	ACALL INIT_DISPLAY
+	MOV DPTR,#MESSAGE
+	
 DISPLAY:
 	CLR A
 	MOVC A,@A+DPTR
@@ -166,16 +170,17 @@ FINISH_RECIEVE:
 ;-------------------------------START OF LCD PROCEDURES------
 
 GET_KEY:  
-       RLC A			;skip D7 data (unused)
+	RLC A			;skip D7 data (unused)
 GET:
-       RLC A                    ;see if any CY bit low
-       JNC MATCH                ;if zero, get the key number        
-       INC DPTR                 ;point to next col. address
-       SJMP GET               ;keep searching
-MATCH: CLR A                    ;set A=0 (match is found)
-       MOVC A,@A+DPTR           ;get key number from table, store result in A
-       INC A
-       RET
+	RLC A                    ;see if any CY bit low
+	JNC MATCH                ;if zero, get the key number        
+	INC DPTR                 ;point to next col. address
+	SJMP GET               ;keep searching
+MATCH: 
+	CLR A                    ;set A=0 (match is found)
+	MOVC A,@A+DPTR           ;get key number from table, store result in A
+	INC A
+	RET
 ;------------
 NoKeyPressed:
       MOV P0,#01110000B      ; GROUND all rows
@@ -231,7 +236,7 @@ ROW_3: MOV DPTR,#KCODE3         ;set DPTR=start of row 3
 ;FOR PROMPTING
 MESSAGE: DB "ENTER A MESSAGE" 
 		DB 00H
-MESSAGE2: DB "Press 1 to Decrypt or 2 to Encrypt" 
+MESSAGE2: DB "Press 1 to Decrypt or else to Encrypt" 
 		DB 00H
 ;ASCII LOOK-UP TABLE FOR EACH ROW
       ORG     300H

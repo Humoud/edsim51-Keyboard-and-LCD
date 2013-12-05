@@ -15,7 +15,7 @@ MAIN:
 DISPLAY_RESULT:
 	ACALL READ_FROM_R0
 STOP_PROG:
-	SJMP STOP
+	SJMP STOP_PROG
 ;----------------------------------START OF LCD PROCEDURES--------
 START_Display:
 	SETB P1.3
@@ -154,6 +154,8 @@ LOOP:
 	CLR RI			;
 	MOV A,SBUF		; read character
 	CJNE A,#0DH, STORE	; if not end of line, store it
+	MOV A,'#'			; END OF string
+	MOV @R0,A		; store receive character in memory
 	SJMP FINISH_RECIEVE
 START_PRINTING_SERIAL:
 	MOV R0,#30H		; else, start sending 

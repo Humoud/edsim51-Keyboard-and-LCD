@@ -6,6 +6,7 @@ MAIN:
 	CLR A
 	ACALL START_Display			; CLEAR DISPLAY THEN,
 								; PROMPT USER TO SELECT ENCRYPT/DECRYPT
+	
 	; KEYPAD
 	CALL CHECK
 	CALL WhichRow
@@ -15,7 +16,7 @@ MAIN:
 	LJMP START_MACHINE			; LET THE MACHINE WORK
 
 DISPLAY_RESULT:
-	;LCALL INIT_DISPLAY
+	; LCALL INIT_DISPLAY
 	LCALL READ_FROM_R0
 STOP_PROG:
 	SJMP STOP_PROG
@@ -27,21 +28,22 @@ SECOND_TIME:
 	ACALL CLEAR_LCD
 	MOV DPTR,#MESSAGE2
 	SJMP DISPLAY
-
 FIRST_TIME:
 	ACALL INIT_DISPLAY
 	MOV DPTR,#MESSAGE
 	SJMP DISPLAY
-READ_FROM_R0:				; DISPLAY FORM R0
-	; ACALL CLEAR_LCD
+READ_FROM_R0:				; DISPLAY FROM R0
 	MOV R0,#50H
 	MOV A,@R0
+READ_A:
+	CJNE A,#23H,R0_TO_LCD
+	RET
 R0_TO_LCD:
+	MOV A,#'H'
 	LCALL SendData
 	INC R0
 	MOV A,@R0
-	CJNE A,#23,R0_TO_LCD
-	RET
+	SJMP READ_A
 CLEAR_LCD:
 	CLR A
 	MOV A,#1
@@ -151,7 +153,6 @@ START_SERIAL:
 	SETB SM1		; put serial port in 8-bit UART mode
 	SETB REN		; enable recieving of serial port
 
-	MOV R6,#0		; R1 contains number of bytes RECIEVED
 	MOV TMOD, #20H		; put timer 1 in 8-bit auto-reload interval timing mode
 	MOV TH1, #0FAH		; put -3 in timer 1 high byte (timer will overflow every 3 us)
 	MOV TL1, #0FAH		; put same value in low byte 
@@ -177,7 +178,6 @@ LOOP2:  JNB TI,LOOP2		; wait till transmission finish
 	SJMP $			
 
 STORE:	
-	INC R6			; increment number of characters received 
 	MOV @R0,A		; store receive character in memory
 	INC R0			; update memory pointer
 	SJMP LOOP		; repeat
